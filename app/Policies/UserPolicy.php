@@ -28,6 +28,6 @@ class UserPolicy
 
     public function delete(User $user, User $model): bool
     {
-        return $user->role === 'admin' && $user->id !== $model->id;
+        return $user->role === 'admin';
     }
 }
