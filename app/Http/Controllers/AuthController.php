@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\ApiAuthMiddleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AuthController extends Controller
+class AuthController extends Controller implements HasMiddleware
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    public static function middleware()
     {
-        // $this->middleware('auth:api', ['except' => ['login', 'signup']]);
+        return [
+            new Middleware(ApiAuthMiddleware::class, except: ['login', 'signup'])
+        ];
     }
 
     /**
