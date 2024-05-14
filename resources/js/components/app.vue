@@ -1,5 +1,5 @@
 <template>
-    <h1 class="">Welcome to Vue.js</h1>
+    <h1 class="text-red-500">Welcome to Vue.js</h1>
     <v-btn> Button </v-btn>
     <v-card class="mx-auto my-8" elevation="16" max-width="344">
         <v-card-item>
