@@ -825,7 +825,7 @@ vue-router@^4.3.2:
   dependencies:
     "@vue/devtools-api" "^6.5.1"
 
-vue@^3.2.0, vue@^3.2.25, vue@^3.4.27, vue@3.4.27:
+vue@^3.2.0, vue@^3.2.25, vue@^3.3.0, vue@^3.4.27, vue@3.4.27:
   version "3.4.27"
   resolved "https://registry.npmjs.org/vue/-/vue-3.4.27.tgz"
   integrity sha512-8s/56uK6r01r1icG/aEOHqyMVxd1bkYcSe9j8HcKtr/xTOFWvnzIVTehNW+5Yt89f+DLBe4A569pnZLS5HzAMA==
@@ -835,6 +835,11 @@ vue@^3.2.0, vue@^3.2.25, vue@^3.4.27, vue@3.4.27:
     "@vue/runtime-dom" "3.4.27"
     "@vue/server-renderer" "3.4.27"
     "@vue/shared" "3.4.27"
+
+vuetify@^3.6.5:
+  version "3.6.5"
+  resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.6.5.tgz"
+  integrity sha512-YrHTM1vb7UllAtfH9tWfTo1wYMjyCSybu4WtXrfMRpMwAaZWgfrMmqD/4Tc+0KqDsDsYMXaYs0nJ6HtdMJZbyA==
 
 watchpack@^2.4.0, watchpack@^2.4.1:
   version "2.4.1"
