@@ -13,8 +13,8 @@ import App from './components/app.vue';
 
 // Define your routes
 const routes = [
-    { path: '/', component: () => import('./Pages/Home.vue') },
-    { path: '/login', component: () => import('./Pages/Login.vue') },
+    { path: '/', component: () => import('./components/Home.vue') },
+    { path: '/login', component: () => import('./components/Login.vue') },
 ];
 
 // Create the router instance
