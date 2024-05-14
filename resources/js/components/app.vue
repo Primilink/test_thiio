@@ -13,4 +13,35 @@
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </v-card-text>
     </v-card>
+
+    <!-- Login form using vuetify -->
+    <v-form class="max-w-xl">
+        <v-text-field
+            v-model="email"
+            label="Email"
+            required
+            outlined
+        ></v-text-field>
+
+        <v-text-field
+            v-model="password"
+            label="Password"
+            required
+            outlined
+            type="password"
+        ></v-text-field>
+
+        <v-btn @click="login" color="primary" dark> Login </v-btn>
+    </v-form>
 </template>
+
+<script setup>
+import { ref } from "vue";
+
+const email = ref("");
+const password = ref("");
+
+const login = (data) => {
+    // TODO: Implement login logic
+};
+</script>
