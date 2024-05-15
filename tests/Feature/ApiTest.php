@@ -38,6 +38,43 @@ class ApiTest extends TestCase
         ]);
     }
 
+    public function test_signup(): void
+    {
+        $response = $this->postJson('/api/auth/signup', [
+            'name' => 'Test User',
+            'email' => 'hello@hello.com',
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'access_token',
+            'token_type',
+            'expires_in',
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'Test User',
+            'email' => 'hello@hello.com',
+        ]);
+
+        // check password is hashed
+        $this->assertDatabaseMissing('users', [
+            'password' => 'password',
+        ]);
+
+
+        // try to sign up with the same email
+        $response = $this->postJson('/api/auth/signup', [
+            'name' => 'Test User',
+            'email' => 'hello@hello.com',
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('email');
+    }
+
     public function test_me(): void
     {
         $user = User::factory()->create();
