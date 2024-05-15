@@ -16,6 +16,7 @@ const routes = [
     { name: 'home', path: '/', component: () => import('./components/Home.vue') },
     { name: 'login', path: '/login', component: () => import('./components/Login.vue'), meta: { onlyGuest: true } },
     { name: 'signup', path: '/signup', component: () => import('./components/Signup.vue'), meta: { onlyGuest: true } },
+    { name: 'dashboard', path: '/dashboard', component: () => import('./components/Dashboard.vue'), meta: { requiresAuth: true } },
 ];
 
 // Create the router instance

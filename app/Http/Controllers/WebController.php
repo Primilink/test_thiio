@@ -20,4 +20,9 @@ class WebController extends Controller
     {
         return view('app');
     }
+
+    public function dashboard()
+    {
+        return view('app');
+    }
 }
