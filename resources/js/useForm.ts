@@ -24,6 +24,12 @@ function useForm(params: object) {
         setErrors(errors: object) {
             this.errors = errors;
         },
+        setValue(key: string, value: any) {
+            this.data[key] = value;
+        },
+        setValues(values: object) {
+            this.data = { ...values };
+        },
         reset() {
             this.data = { ...this.originalData };
             this.errors = {};
