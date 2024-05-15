@@ -96,8 +96,8 @@ const login = async (data) => {
 
     loginForm.post("/api/auth/signup", {
         onSuccess: (data) => {
-            if (data.access_token && data.expires_in) {
-                session.login(data.access_token, data.expires_in);
+            if (data.access_token && data.expires_in && data.user) {
+                session.login(data.access_token, data.expires_in, data.user);
                 router.go();
             }
         },

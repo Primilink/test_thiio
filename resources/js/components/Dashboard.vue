@@ -141,7 +141,7 @@
                         <v-btn
                             color="#c43747"
                             @click="deleteUser(user.id)"
-                            v-if="session_user.id !== user.id"
+                            v-if="session_user?.id !== user.id"
                         >
                             Delete
                         </v-btn>
