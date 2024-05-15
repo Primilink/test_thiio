@@ -1,6 +1,6 @@
 <template>
     <!-- <p v-if="usersForm.processing">Loading users...</p> -->
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="tw-max-w-7xl tw-mx-auto tw-py-6 sm:tw-px-6 lg:tw-px-8">
         <v-table>
             <thead>
                 <tr>
@@ -14,11 +14,11 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td
-                        class="flex flex-row justify-start align-middle items-center gap-2"
+                        class="tw-flex tw-flex-row tw-justify-start tw-align-middle tw-items-center tw-gap-2"
                     >
-                        <!-- <v-btn color="#376bc4" @click="editUser(user)">
-                            Edit
-                        </v-btn> -->
+                        <v-btn color="#376bc4" :to="'/users/' + user.id">
+                            View Details
+                        </v-btn>
 
                         <v-dialog max-width="500">
                             <template
@@ -33,7 +33,7 @@
                             </template>
 
                             <template v-slot:default="{ isActive }">
-                                <v-card title="Editar usuario">
+                                <v-card title="Edit user">
                                     <v-card-text>
                                         <v-text-field
                                             v-model="user.name"
@@ -45,6 +45,13 @@
                                             label="Email"
                                             :rules="emailRules"
                                         ></v-text-field>
+
+                                        <v-alert
+                                            v-if="confirmed"
+                                            type="success"
+                                            title="User updated"
+                                            closable
+                                        ></v-alert>
                                     </v-card-text>
 
                                     <v-card-actions>
@@ -52,12 +59,18 @@
 
                                         <v-btn
                                             text="Close Dialog"
-                                            @click="isActive.value = false"
+                                            @click="
+                                                isActive.value = false;
+                                                confirmed = false;
+                                            "
                                         ></v-btn>
                                         <v-btn
                                             text="Save Changes"
                                             color="primary"
                                             @click="editUser(user)"
+                                            :disabled="
+                                                updateUserForm.processing
+                                            "
                                         />
                                     </v-card-actions>
                                 </v-card>
@@ -103,6 +116,7 @@ const emailRules = [
 ];
 
 const users = ref([]);
+const confirmed = ref(false);
 
 onMounted(() => {
     usersForm.get("/api/users", {
@@ -127,6 +141,7 @@ const editUser = (user) => {
     updateUserForm.setValues(user);
     updateUserForm.put(`/api/users/${user.id}`, {
         onSuccess: () => {
+            confirmed.value = true;
             usersForm.get("/api/users", {
                 onSuccess: (response) => {
                     users.value = response.data.data;
