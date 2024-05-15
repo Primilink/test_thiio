@@ -1,21 +1,76 @@
 <template>
-    <p v-if="usersForm.processing">Loading users...</p>
-    <v-table>
-        <thead>
-            <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Email</th>
-                <th class="text-left">Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in users" :key="user.id">
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
-            </tr>
-        </tbody>
-    </v-table>
+    <!-- <p v-if="usersForm.processing">Loading users...</p> -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <v-table>
+            <thead>
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Email</th>
+                    <th class="text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in users" :key="user.id">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td
+                        class="flex flex-row justify-start align-middle items-center gap-2"
+                    >
+                        <!-- <v-btn color="#376bc4" @click="editUser(user)">
+                            Edit
+                        </v-btn> -->
+
+                        <v-dialog max-width="500">
+                            <template
+                                v-slot:activator="{ props: activatorProps }"
+                            >
+                                <v-btn
+                                    v-bind="activatorProps"
+                                    color="surface-variant"
+                                    text="Edit"
+                                    variant="flat"
+                                ></v-btn>
+                            </template>
+
+                            <template v-slot:default="{ isActive }">
+                                <v-card title="Editar usuario">
+                                    <v-card-text>
+                                        <v-text-field
+                                            v-model="user.name"
+                                            label="Name"
+                                            :rules="nameRules"
+                                        ></v-text-field>
+                                        <v-text-field
+                                            v-model="user.email"
+                                            label="Email"
+                                            :rules="emailRules"
+                                        ></v-text-field>
+                                    </v-card-text>
+
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+
+                                        <v-btn
+                                            text="Close Dialog"
+                                            @click="isActive.value = false"
+                                        ></v-btn>
+                                        <v-btn
+                                            text="Save Changes"
+                                            color="primary"
+                                            @click="editUser(user)"
+                                        />
+                                    </v-card-actions>
+                                </v-card>
+                            </template>
+                        </v-dialog>
+                        <v-btn color="#c43747" @click="deleteUser(user.id)">
+                            Delete
+                        </v-btn>
+                    </td>
+                </tr>
+            </tbody>
+        </v-table>
+    </div>
 </template>
 
 <script setup>
@@ -23,15 +78,61 @@ import { onMounted, ref } from "vue";
 import useForm from "../useForm";
 
 const usersForm = useForm({});
+const updateUserForm = useForm({});
+const delForm = useForm({});
+
+const nameRules = [
+    (value) => {
+        if (value) return true;
+
+        return "Name is requred.";
+    },
+];
+
+const emailRules = [
+    (value) => {
+        if (value) return true;
+
+        return "E-mail is requred.";
+    },
+    (value) => {
+        if (/.+@.+\..+/.test(value)) return true;
+
+        return "E-mail must be valid.";
+    },
+];
 
 const users = ref([]);
 
 onMounted(() => {
     usersForm.get("/api/users", {
         onSuccess: (response) => {
-            console.log(response.data.data);
             users.value = response.data.data;
         },
     });
 });
+
+const deleteUser = (id) => {
+    if (!confirm("Are you sure you want to delete this user?")) {
+        return;
+    }
+    delForm.delete(`/api/users/${id}`, {
+        onSuccess: () => {
+            users.value = users.value.filter((user) => user.id !== id);
+        },
+    });
+};
+
+const editUser = (user) => {
+    updateUserForm.setValues(user);
+    updateUserForm.put(`/api/users/${user.id}`, {
+        onSuccess: () => {
+            usersForm.get("/api/users", {
+                onSuccess: (response) => {
+                    users.value = response.data.data;
+                },
+            });
+        },
+    });
+};
 </script>
