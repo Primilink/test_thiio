@@ -244,6 +244,7 @@ const createUser = () => {
     newUserForm.post("/api/users", {
         onSuccess: () => {
             newUserCreated.value = true;
+            errors.value = {};
             usersForm.get("/api/users", {
                 onSuccess: (response) => {
                     users.value = response.data.data;
