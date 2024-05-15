@@ -15,6 +15,7 @@
                     outlined
                     required
                     :rules="nameRules"
+                    :error-messages="errors.name"
                 ></v-text-field>
 
                 <v-text-field
@@ -23,6 +24,7 @@
                     outlined
                     required
                     :rules="emailRules"
+                    :error-messages="errors.email"
                 ></v-text-field>
 
                 <v-text-field
@@ -32,6 +34,7 @@
                     required
                     type="password"
                     :rules="passwordRules"
+                    :error-messages="errors.password"
                 ></v-text-field>
 
                 <v-btn @click="login" color="primary">Log in</v-btn>
@@ -79,6 +82,7 @@ const passwordRules = [
 ];
 
 const form = ref(null);
+const errors = ref({});
 
 const loginForm = useForm({
     name: "",
@@ -96,6 +100,9 @@ const login = async (data) => {
                 session.login(data.access_token, data.expires_in);
                 router.go();
             }
+        },
+        onError: (error) => {
+            errors.value = loginForm.errors;
         },
     });
 };
