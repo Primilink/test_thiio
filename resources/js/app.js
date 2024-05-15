@@ -15,6 +15,7 @@ import App from './components/app.vue';
 const routes = [
     { path: '/', component: () => import('./components/Home.vue') },
     { path: '/login', component: () => import('./components/Login.vue') },
+    { path: '/signup', component: () => import('./components/Signup.vue') },
 ];
 
 // Create the router instance
