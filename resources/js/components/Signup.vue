@@ -8,27 +8,30 @@
 
         <v-card-text>
             <!-- Login form -->
-            <v-form>
+            <v-form ref="form" @submit.prevent="login">
                 <v-text-field
-                    v-model="name"
+                    v-model="loginForm.data.name"
                     label="Name"
                     outlined
                     required
+                    :rules="nameRules"
                 ></v-text-field>
 
                 <v-text-field
-                    v-model="email"
+                    v-model="loginForm.data.email"
                     label="Email"
                     outlined
                     required
+                    :rules="emailRules"
                 ></v-text-field>
 
                 <v-text-field
-                    v-model="password"
+                    v-model="loginForm.data.password"
                     label="Password"
                     outlined
                     required
                     type="password"
+                    :rules="passwordRules"
                 ></v-text-field>
 
                 <v-btn @click="login" color="primary">Log in</v-btn>
@@ -40,37 +43,59 @@
 <script setup>
 import { ref } from "vue";
 import useForm from "../useForm";
-import useStorage from "../useStorage";
+import { useRouter } from "vue-router";
+import useSession from "../useSession";
 
-const storage = useStorage();
+const session = useSession();
+const router = useRouter();
 
-const name = ref("");
-const email = ref("");
-const password = ref("");
+const emailRules = [
+    (value) => {
+        if (value) return true;
+
+        return "E-mail is requred.";
+    },
+    (value) => {
+        if (/.+@.+\..+/.test(value)) return true;
+
+        return "E-mail must be valid.";
+    },
+];
+
+const nameRules = [
+    (value) => {
+        if (value) return true;
+
+        return "Name is required.";
+    },
+];
+
+const passwordRules = [
+    (value) => {
+        if (value) return true;
+
+        return "Password is required.";
+    },
+];
+
+const form = ref(null);
 
 const loginForm = useForm({
-    name,
-    email,
-    password,
+    name: "",
+    email: "",
+    password: "",
 });
 
-const login = (data) => {
-    if (loginForm.processing) return;
+const login = async (data) => {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
 
     loginForm.post("/api/auth/signup", {
         onSuccess: (data) => {
-            console.log(data);
-            // if (data.access_token) {
-            //     storage.setItem("token", data.access_token);
-            // }
-
-            // if (data.expires_in) {
-            //     let expiration = new Date();
-            //     expiration.setSeconds(
-            //         expiration.getSeconds() + data.expires_in
-            //     );
-            //     storage.setItem("expiration", expiration);
-            // }
+            if (data.access_token && data.expires_in) {
+                session.login(data.access_token, data.expires_in);
+                router.go();
+            }
         },
     });
 };
