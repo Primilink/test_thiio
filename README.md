@@ -1,6 +1,6 @@
 # User management
 
-This is a simple user management system. It is built using Laravel and Vue.js (with vuetify).
+This is a simple user management system. It is built using Laravel and Vue.js (with vuetify). And JWT is used for authentication.
 
 ## Installation
 
