@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiAuthMiddleware;
+use App\Models\User;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller implements HasMiddleware
 {
@@ -32,6 +34,22 @@ class AuthController extends Controller implements HasMiddleware
         }
 
         return $this->respondWithToken($token);
+    }
+
+
+    public function signup(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+        ]);
+
+        $user = User::create($validated);
+
+        return response()->json([
+            'data' => $user,
+        ]);
     }
 
     /**

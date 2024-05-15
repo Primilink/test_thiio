@@ -15,4 +15,9 @@ class WebController extends Controller
     {
         return view('app');
     }
+
+    public function signup()
+    {
+        return view('app');
+    }
 }
