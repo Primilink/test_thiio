@@ -45,7 +45,13 @@ class UserController extends Controller
             ], 401);
         }
 
-        $user = User::create($request->all());
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+        ]);
+
+        $user = User::create($validated);
 
         return response()->json([
             'data' => $user,
@@ -60,7 +66,12 @@ class UserController extends Controller
             ], 401);
         }
 
-        $user->update($request->all());
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update($validated);
 
         return response()->json([
             'data' => $user,
