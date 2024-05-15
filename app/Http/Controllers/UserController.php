@@ -75,6 +75,13 @@ class UserController extends Controller
             ], 401);
         }
 
+        // cannot delete self
+        if ($request->user()->id === $user->id) {
+            return response()->json([
+                'error' => 'Cannot delete self',
+            ], 400);
+        }
+
         $user->delete();
 
         return response()->json([
