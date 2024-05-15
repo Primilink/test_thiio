@@ -1,6 +1,68 @@
 <template>
     <!-- <p v-if="usersForm.processing">Loading users...</p> -->
     <div class="tw-max-w-7xl tw-mx-auto tw-py-6 sm:tw-px-6 lg:tw-px-8">
+        {{ usersForm.errors.email }}
+        <v-dialog max-width="500">
+            <template v-slot:activator="{ props: activatorProps }">
+                <v-btn
+                    v-bind="activatorProps"
+                    color="surface-variant"
+                    text="Create User"
+                    variant="flat"
+                ></v-btn>
+            </template>
+
+            <template v-slot:default="{ isActive }">
+                <v-card title="Create new user">
+                    <v-card-text>
+                        <v-text-field
+                            v-model="newUserForm.data.name"
+                            label="Name"
+                            :rules="nameRules"
+                            :error-messages="errors.name"
+                        ></v-text-field>
+                        <v-text-field
+                            v-model="newUserForm.data.email"
+                            label="Email"
+                            :rules="emailRules"
+                            :error-messages="errors.email"
+                        ></v-text-field>
+                        <v-text-field
+                            v-model="newUserForm.data.password"
+                            label="Password"
+                            type="password"
+                            :rules="passwordRules"
+                            :error-messages="errors.password"
+                        ></v-text-field>
+
+                        <v-alert
+                            v-if="newUserCreated"
+                            type="success"
+                            title="User created"
+                            closable
+                        ></v-alert>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            text="Close Dialog"
+                            @click="
+                                isActive.value = false;
+                                newUserCreated = false;
+                            "
+                        ></v-btn>
+                        <v-btn
+                            text="Create User"
+                            color="primary"
+                            @click="createUser"
+                            :disabled="updateUserForm.processing"
+                        />
+                    </v-card-actions>
+                </v-card>
+            </template>
+        </v-dialog>
         <v-table>
             <thead>
                 <tr>
@@ -115,7 +177,26 @@ const emailRules = [
     },
 ];
 
+const passwordRules = [
+    (value) => {
+        if (value) return true;
+
+        return "Password is requred.";
+    },
+];
+
 const users = ref([]);
+
+const errors = ref({});
+
+const newUserForm = useForm({
+    name: "",
+    email: "",
+    password: "",
+});
+
+const newUserCreated = ref(false);
+
 const confirmed = ref(false);
 
 onMounted(() => {
@@ -147,6 +228,30 @@ const editUser = (user) => {
                     users.value = response.data.data;
                 },
             });
+        },
+    });
+};
+
+const createUser = () => {
+    if (
+        newUserForm.data.name === "" ||
+        newUserForm.data.email === "" ||
+        newUserForm.data.password === ""
+    ) {
+        return;
+    }
+
+    newUserForm.post("/api/users", {
+        onSuccess: () => {
+            newUserCreated.value = true;
+            usersForm.get("/api/users", {
+                onSuccess: (response) => {
+                    users.value = response.data.data;
+                },
+            });
+        },
+        onError: (data) => {
+            errors.value = newUserForm.errors;
         },
     });
 };
