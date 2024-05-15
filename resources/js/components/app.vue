@@ -1,6 +1,7 @@
 <template>
     <nav class="tw-bg-gray-800 tw-p-4 tw-text-white tw-flex tw-justify-between">
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/" v-if="notLoggedIn">Home</RouterLink>
+        <RouterLink to="/dashboard" v-if="!notLoggedIn">Dashboard</RouterLink>
         <!-- <p><strong>Current route path:</strong> {{ $route.fullPath }}</p> -->
         <div class="tw-flex tw-space-x-4">
             <RouterLink to="/signup" v-if="notLoggedIn">Sign Up</RouterLink>
