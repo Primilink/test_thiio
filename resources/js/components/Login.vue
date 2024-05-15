@@ -4,6 +4,9 @@
             <v-card-title>Log in form</v-card-title>
 
             <!-- <v-card-subtitle> Card subtitle secondary text </v-card-subtitle> -->
+            <v-alert v-if="errors.credentials" type="error">
+                Could not log in. Please check your credentials.
+            </v-alert>
         </v-card-item>
 
         <v-card-text>
@@ -45,6 +48,8 @@ const session = useSession();
 const email = ref("");
 const password = ref("");
 
+const errors = ref({});
+
 const form = ref(null);
 
 const loginForm = useForm({
@@ -84,6 +89,10 @@ const login = async (data) => {
                 session.login(data.access_token, data.expires_in);
                 router.go();
             }
+        },
+        onError: (error) => {
+            errors.value = loginForm.errors;
+            errors.value.credentials = true;
         },
     });
 };
