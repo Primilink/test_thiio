@@ -1,4 +1,5 @@
 import { reactive, watch } from "vue";
+import useSession from "./useSession";
 
 interface Config {
     method: string;
@@ -46,7 +47,9 @@ function useForm(params: object) {
             }
             this.processing = true;
 
-            let _token = localStorage.getItem("jwt");
+            let session = useSession();
+
+            let _token = session.getToken();
 
             // alert missing csrf token
             // if (!_token) {

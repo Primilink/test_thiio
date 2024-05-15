@@ -5,6 +5,7 @@
         <div class="flex space-x-4">
             <RouterLink to="/signup" v-if="notLoggedIn">Sign Up</RouterLink>
             <RouterLink to="/login" v-if="notLoggedIn">Log in</RouterLink>
+            <button @click="logout" v-if="!notLoggedIn">Log out</button>
         </div>
     </nav>
     <main class="bg-gray-100 p-4 min-h-[calc(100vh-64px)]">
@@ -16,8 +17,27 @@
 import { onMounted, ref } from "vue";
 
 import useSession from "../useSession";
+import useForm from "../useForm";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const session = useSession();
 const notLoggedIn = ref(true);
+
+const logout = async () => {
+    if (!session.isAuthenticated()) {
+        return;
+    }
+
+    let logoutForm = useForm({});
+    logoutForm.post("/api/auth/logout", {
+        onSuccess: (data) => {
+            notLoggedIn.value = true;
+            session.logout();
+            router.go();
+        },
+    });
+};
 
 onMounted(() => {
     console.log("<app> App component mounted");

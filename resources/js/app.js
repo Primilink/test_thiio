@@ -32,6 +32,11 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.onlyGuest && session.isAuthenticated()) {
         return next({ name: 'home' });
     }
+
+    if (to.meta.requiresAuth && !session.isAuthenticated()) {
+        return next({ name: 'login' });
+    }
+
     else next()
 })
 
