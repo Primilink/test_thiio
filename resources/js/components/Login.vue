@@ -80,10 +80,8 @@ const login = async (data) => {
 
     loginForm.post("/api/auth/login", {
         onSuccess: (data) => {
-            console.log(data);
             if (data.access_token && data.expires_in) {
                 session.login(data.access_token, data.expires_in);
-                //refresh the page
                 router.go();
             }
         },
