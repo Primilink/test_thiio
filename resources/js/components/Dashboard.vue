@@ -138,7 +138,11 @@
                                 </v-card>
                             </template>
                         </v-dialog>
-                        <v-btn color="#c43747" @click="deleteUser(user.id)">
+                        <v-btn
+                            color="#c43747"
+                            @click="deleteUser(user.id)"
+                            v-if="session_user.id !== user.id"
+                        >
                             Delete
                         </v-btn>
                     </td>
@@ -151,6 +155,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import useForm from "../useForm";
+
+import useSession from "../useSession";
+
+const session = useSession();
+
+const session_user = session.getUser();
 
 const usersForm = useForm({});
 const updateUserForm = useForm({});
