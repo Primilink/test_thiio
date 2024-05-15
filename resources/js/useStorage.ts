@@ -1,17 +1,17 @@
 const useStorage = () => {
     const setItem = (key: string, value: any) => {
-        console.log("setItem", key, value);
+        console.log("<useStorage> setItem", key, value);
         localStorage.setItem(key, JSON.stringify(value));
     };
 
     const getItem = (key: string) => {
-        console.log("getItem", key);
+        console.log("<useStorage> getItem", key);
         const value = localStorage.getItem(key);
         return value ? JSON.parse(value) : null;
     };
 
     const removeItem = (key: string) => {
-        console.log("removeItem", key);
+        console.log("<useStorage> removeItem", key);
         localStorage.removeItem(key);
     };
 
