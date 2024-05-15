@@ -8,12 +8,13 @@
 
         <v-card-text>
             <!-- Login form -->
-            <v-form>
+            <v-form ref="form" @submit.prevent="login">
                 <v-text-field
                     v-model="email"
                     label="Email"
                     outlined
                     required
+                    :rules="emailRules"
                 ></v-text-field>
 
                 <v-text-field
@@ -22,9 +23,10 @@
                     outlined
                     required
                     type="password"
+                    :rules="passwordRules"
                 ></v-text-field>
 
-                <v-btn @click="login" color="primary">Log in</v-btn>
+                <v-btn type="submit" color="primary">Log in</v-btn>
             </v-form>
         </v-card-text>
     </v-card>
@@ -40,13 +42,38 @@ const storage = useStorage();
 const email = ref("");
 const password = ref("");
 
+const form = ref(null);
+
 const loginForm = useForm({
     email,
     password,
 });
 
-const login = (data) => {
-    if (loginForm.processing) return;
+const emailRules = [
+    (value) => {
+        if (value) return true;
+
+        return "E-mail is requred.";
+    },
+    (value) => {
+        if (/.+@.+\..+/.test(value)) return true;
+
+        return "E-mail must be valid.";
+    },
+];
+
+const passwordRules = [
+    (value) => {
+        if (value) return true;
+
+        return "Password is required.";
+    },
+];
+
+const login = async (data) => {
+    const { valid } = await form.value.validate();
+
+    if (!valid) return;
 
     loginForm.post("/api/auth/login", {
         onSuccess: (data) => {
