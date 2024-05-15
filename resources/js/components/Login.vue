@@ -1,7 +1,7 @@
 <template>
     <v-card class="mx-auto my-8" elevation="16" max-width="344">
         <v-card-item>
-            <v-card-title> Log in</v-card-title>
+            <v-card-title>Log in form</v-card-title>
 
             <!-- <v-card-subtitle> Card subtitle secondary text </v-card-subtitle> -->
         </v-card-item>
@@ -32,7 +32,10 @@
 
 <script setup>
 import { ref } from "vue";
-import useForm from "./useForm";
+import useForm from "../useForm";
+import useStorage from "../useStorage";
+
+const storage = useStorage();
 
 const email = ref("");
 const password = ref("");
@@ -48,6 +51,17 @@ const login = (data) => {
     loginForm.post("/api/auth/login", {
         onSuccess: (data) => {
             console.log(data);
+            if (data.access_token) {
+                storage.setItem("token", data.access_token);
+            }
+
+            if (data.expires_in) {
+                let expiration = new Date();
+                expiration.setSeconds(
+                    expiration.getSeconds() + data.expires_in
+                );
+                storage.setItem("expiration", expiration);
+            }
         },
     });
 };
