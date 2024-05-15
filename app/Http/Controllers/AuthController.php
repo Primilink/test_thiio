@@ -47,9 +47,7 @@ class AuthController extends Controller implements HasMiddleware
 
         $user = User::create($validated);
 
-        return response()->json([
-            'data' => $user,
-        ]);
+        return $this->respondWithToken(auth('api')->login($user));
     }
 
     /**
