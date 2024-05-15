@@ -11,3 +11,26 @@
         <RouterView />
     </main>
 </template>
+
+<script setup>
+import { onMounted } from "vue";
+import useStorage from "../useStorage";
+
+onMounted(() => {
+    console.log("<app> App component mounted");
+    const storage = useStorage();
+    if (storage.getItem("token")) {
+        console.log("<app> Token found in storage");
+        // check expiration
+        if (storage.getItem("expiration")) {
+            let expiration = new Date(storage.getItem("expiration"));
+            let now = new Date();
+            if (now > expiration) {
+                console.log("<app> Token expired");
+                storage.removeItem("token");
+                storage.removeItem("expiration");
+            }
+        }
+    }
+});
+</script>
