@@ -3,8 +3,8 @@
         <RouterLink to="/">Home</RouterLink>
         <!-- <p><strong>Current route path:</strong> {{ $route.fullPath }}</p> -->
         <div class="flex space-x-4">
-            <RouterLink to="/signup">Sign Up</RouterLink>
-            <RouterLink to="/login">Log in</RouterLink>
+            <RouterLink to="/signup" v-if="notLoggedIn">Sign Up</RouterLink>
+            <RouterLink to="/login" v-if="notLoggedIn">Log in</RouterLink>
         </div>
     </nav>
     <main class="bg-gray-100 p-4 min-h-[calc(100vh-64px)]">
@@ -13,24 +13,17 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import useStorage from "../useStorage";
+import { onMounted, ref } from "vue";
+
+import useSession from "../useSession";
+
+const notLoggedIn = ref(true);
 
 onMounted(() => {
     console.log("<app> App component mounted");
-    const storage = useStorage();
-    if (storage.getItem("token")) {
-        console.log("<app> Token found in storage");
-        // check expiration
-        if (storage.getItem("expiration")) {
-            let expiration = new Date(storage.getItem("expiration"));
-            let now = new Date();
-            if (now > expiration) {
-                console.log("<app> Token expired");
-                storage.removeItem("token");
-                storage.removeItem("expiration");
-            }
-        }
+    const session = useSession();
+    if (session.isAuthenticated()) {
+        notLoggedIn.value = false;
     }
 });
 </script>

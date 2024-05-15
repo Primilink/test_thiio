@@ -34,10 +34,13 @@
 
 <script setup>
 import { ref } from "vue";
-import useForm from "../useForm";
-import useStorage from "../useStorage";
+import { useRouter } from "vue-router";
 
-const storage = useStorage();
+import useForm from "../useForm";
+import useSession from "../useSession";
+
+const router = useRouter();
+const session = useSession();
 
 const email = ref("");
 const password = ref("");
@@ -78,16 +81,10 @@ const login = async (data) => {
     loginForm.post("/api/auth/login", {
         onSuccess: (data) => {
             console.log(data);
-            if (data.access_token) {
-                storage.setItem("token", data.access_token);
-            }
-
-            if (data.expires_in) {
-                let expiration = new Date();
-                expiration.setSeconds(
-                    expiration.getSeconds() + data.expires_in
-                );
-                storage.setItem("expiration", expiration);
+            if (data.access_token && data.expires_in) {
+                session.login(data.access_token, data.expires_in);
+                //refresh the page
+                router.go();
             }
         },
     });
