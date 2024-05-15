@@ -93,7 +93,7 @@ function useForm(params: object) {
 
             let body: FormData | undefined = form;
             if (config.method === "GET" || config.method === "HEAD") {
-                body = new FormData();
+                body = undefined;
             }
 
             // add method to the form data as well
