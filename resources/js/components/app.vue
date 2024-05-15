@@ -1,14 +1,14 @@
 <template>
-    <nav class="bg-gray-800 p-4 text-white flex justify-between">
+    <nav class="tw-bg-gray-800 tw-p-4 tw-text-white tw-flex tw-justify-between">
         <RouterLink to="/">Home</RouterLink>
         <!-- <p><strong>Current route path:</strong> {{ $route.fullPath }}</p> -->
-        <div class="flex space-x-4">
+        <div class="tw-flex tw-space-x-4">
             <RouterLink to="/signup" v-if="notLoggedIn">Sign Up</RouterLink>
             <RouterLink to="/login" v-if="notLoggedIn">Log in</RouterLink>
             <button @click="logout" v-if="!notLoggedIn">Log out</button>
         </div>
     </nav>
-    <main class="bg-gray-100 p-4 min-h-[calc(100vh-64px)]">
+    <main class="tw-bg-gray-100 tw-p-4 tw-min-h-[calc(100vh-64px)]">
         <RouterView />
     </main>
 </template>

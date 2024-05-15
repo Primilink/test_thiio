@@ -1,5 +1,10 @@
 <template>
-    <v-card class="mx-auto my-8" elevation="16" max-width="344" v-if="loggedIn">
+    <v-card
+        class="tw-mx-auto tw-my-8"
+        elevation="16"
+        max-width="344"
+        v-if="loggedIn"
+    >
         <v-card-item>
             <v-card-title> You are logged in! </v-card-title>
         </v-card-item>
@@ -8,7 +13,7 @@
             Go to the dashboard to access awesome features!
         </v-card-text>
 
-        <v-card-actions class="flex justify-center">
+        <v-card-actions class="tw-flex tw-justify-center">
             <v-btn to="/dashboard" class="bg-primary text-white p-2 rounded"
                 >Go to dashboard</v-btn
             >
@@ -16,7 +21,7 @@
     </v-card>
 
     <v-card
-        class="mx-auto my-8"
+        class="tw-mx-auto tw-my-8"
         elevation="16"
         max-width="344"
         v-if="!loggedIn"

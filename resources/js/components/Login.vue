@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto my-8" elevation="16" max-width="344">
+    <v-card class="tw-mx-auto tw-my-8" elevation="16" max-width="344">
         <v-card-item>
             <v-card-title>Log in form</v-card-title>
 
