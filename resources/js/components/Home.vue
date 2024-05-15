@@ -1,27 +1,36 @@
 <template>
-    <h1 class="text-red-500">Welcome to Vue.js</h1>
-    <v-btn> Button </v-btn>
-    <v-card class="mx-auto my-8" elevation="16" max-width="344">
+    <v-card class="mx-auto my-8" elevation="16" max-width="344" v-if="loggedIn">
         <v-card-item>
-            <v-card-title> Card title </v-card-title>
-
-            <v-card-subtitle> Card subtitle secondary text </v-card-subtitle>
+            <v-card-title> You are logged in! </v-card-title>
         </v-card-item>
 
         <v-card-text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Go to the dashboard to access awesome features!
+        </v-card-text>
+
+        <v-card-actions class="flex justify-center">
+            <v-btn to="/dashboard" class="bg-primary text-white p-2 rounded"
+                >Go to dashboard</v-btn
+            >
+        </v-card-actions>
+    </v-card>
+
+    <v-card
+        class="mx-auto my-8"
+        elevation="16"
+        max-width="344"
+        v-if="!loggedIn"
+    >
+        <v-card-text>
+            Hi there, log in or sign up to access awesome features!
         </v-card-text>
     </v-card>
 </template>
 
 <script setup>
+import useSession from "../useSession";
 import { ref } from "vue";
 
-const email = ref("");
-const password = ref("");
-
-const login = (data) => {
-    // TODO: Implement login logic
-};
+const session = useSession();
+const loggedIn = ref(session.isAuthenticated());
 </script>
