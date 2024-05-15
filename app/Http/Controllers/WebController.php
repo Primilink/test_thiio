@@ -25,4 +25,9 @@ class WebController extends Controller
     {
         return view('app');
     }
+
+    public function users($id)
+    {
+        return view('app');
+    }
 }
